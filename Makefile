@@ -11,6 +11,10 @@ deploy: build
 	sam deploy --template-file $(SAM_FILE) --stack-name $(STACK_NAME) --capabilities CAPABILITY_IAM --parameter-overrides ZippedArtifactBucket=$(ZIPPED_ARTIFACT_BUCKET) UnzippedArtifactBucket=$(UNZIPPED_ARTIFACT_BUCKET)
 .PHONY: deploy
 
+s3-init:
+	aws s3 mb "s3://$(STACK_BUCKET)"
+.PHONY: s3-init
+
 delete:
 	aws s3 rm "s3://$(ZIPPED_ARTIFACT_BUCKET)" --recursive
 	aws s3 rm "s3://$(UNZIPPED_ARTIFACT_BUCKET)" --recursive
@@ -18,6 +22,14 @@ delete:
 	aws s3 rm "s3://$(STACK_BUCKET)" --recursive
 	aws s3 rb "s3://$(STACK_BUCKET)"
 .PHONY: delete
+
+zip-clean:
+	aws s3 rm "s3://$(ZIPPED_ARTIFACT_BUCKET)/names.zip"
+.PHONY: zip-clean
+
+zip-up:
+	aws s3 cp "./testdata/names.zip" "s3://$(ZIPPED_ARTIFACT_BUCKET)/names.zip"
+.PHONY: zip-up
 
 test:
 	go test ./...
