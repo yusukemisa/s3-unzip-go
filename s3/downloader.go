@@ -41,7 +41,7 @@ func (d *Downloader) Download() (string, error) {
 		return "", nil
 	}
 
-	log.Println("Doenloaded ", f.Name(), numBytes, " bytes")
+	log.Println("Downloaded ", f.Name(), numBytes, " bytes")
 
 	return f.Name(), nil
 }
