@@ -40,12 +40,15 @@ const (
 	region           = endpoints.ApNortheast1RegionID
 )
 
+func init() {
+	destBucket = os.Getenv("UNZIPPED_ARTIFACT_BUCKET")
+}
+
 func main() {
 	lambda.Start(handler)
 }
 
 func handler(ctx context.Context, s3Event events.S3Event) {
-	fmt.Print("")
 	if lc, ok := lambdacontext.FromContext(ctx); !ok {
 		log.Printf("requestID=%s", lc.AwsRequestID)
 	}
